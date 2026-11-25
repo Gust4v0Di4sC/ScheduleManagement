@@ -1,0 +1,43 @@
+name: .NET CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    env:
+      DOTNET_NOLOGO: true
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
+      VSTEST_ARTIFACTS_DIRECTORY: ${{ github.workspace }}/TestResults
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+          cache: true
+          cache-dependency-path: '**/*.csproj'
+
+      - name: Restore
+        run: dotnet restore Reservas.slnx
+
+      - name: Build
+        run: dotnet build Reservas.slnx --no-restore --configuration Release --warnaserror
+
+      - name: Test
+        run: dotnet test Reservas.slnx --no-build --configuration Release --logger trx
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: TestResults
+          if-no-files-found: ignore
