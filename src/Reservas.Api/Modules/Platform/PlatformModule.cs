@@ -22,6 +22,15 @@ internal static class PlatformModule
             .Validate(options => options.RateLimit.WindowSeconds > 0, "Rate-limit window must be positive.")
             .ValidateOnStart();
 
+        services
+            .AddOptions<SensitiveConfigurationOptions>()
+            .Bind(configuration.GetSection(SensitiveConfigurationOptions.SectionName))
+            .ValidateDataAnnotations()
+            .Validate(
+                options => !options.Enabled || !string.IsNullOrWhiteSpace(options.PlaceholderApiKey),
+                "SensitiveConfiguration:PlaceholderApiKey must be supplied externally when sensitive configuration is enabled.")
+            .ValidateOnStart();
+
         services.AddControllers();
         services.AddOpenApi();
         services.AddHealthChecks();

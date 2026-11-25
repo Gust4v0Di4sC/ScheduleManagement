@@ -27,3 +27,19 @@ Open `Reservas.slnx`, set `Reservas.Api` as the startup project, choose the HTTP
 ## Configuration
 
 Non-sensitive defaults live in `appsettings.json`. Store development secrets with User Secrets and provide configuration externally in other environments. Do not commit connection strings, signing keys, provider credentials, or exported data.
+
+The `SensitiveConfiguration` placeholder proves this configuration path without committing a secret. It is disabled by default. To exercise it with User Secrets:
+
+```powershell
+dotnet user-secrets set "SensitiveConfiguration:Enabled" "true" --project src/Reservas.Api
+dotnet user-secrets set "SensitiveConfiguration:PlaceholderApiKey" "development-only-value" --project src/Reservas.Api
+```
+
+Other environments can provide the same values externally. For example, PowerShell environment variables use double underscores for nested keys:
+
+```powershell
+$env:SensitiveConfiguration__Enabled = "true"
+$env:SensitiveConfiguration__PlaceholderApiKey = "externally-managed-value"
+```
+
+When enabled, startup validation rejects an absent or blank `PlaceholderApiKey`. Replace this placeholder with the owning module's typed settings when a real secret such as a JWT signing key or provider credential is introduced.

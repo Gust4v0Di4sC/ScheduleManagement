@@ -39,3 +39,12 @@ internal sealed class RateLimitOptions
     [Range(0, 10_000)]
     public int QueueLimit { get; init; }
 }
+
+internal sealed class SensitiveConfigurationOptions
+{
+    internal const string SectionName = "SensitiveConfiguration";
+
+    public bool Enabled { get; init; }
+
+    public string? PlaceholderApiKey { get; init; }
+}
