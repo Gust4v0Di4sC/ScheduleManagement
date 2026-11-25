@@ -1,10 +1,44 @@
-**/bin/
-**/obj/
-.vs/
-*.user
+# .NET build and test output
+[Bb]in/
+[Oo]bj/
+artifacts/
 TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+# IDE and user-specific state
+.vs/
 .idea/
 .vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
 appsettings.Local.json
+appsettings.*.Local.json
+appsettings.local.json
+appsettings.*.local.json
+secrets.json
+*.secrets.json
+http-client.private.env.json
+*.http.user
+
+# Certificates, keys and private deployment profiles
+*.pfx
+*.p12
+*.pem
+*.key
+*.jks
+*.keystore
+*.publishsettings
+*.pubxml.user
+
+# Runtime-generated local data
 **/App_Data/
-**/App_Data/
+*.log
